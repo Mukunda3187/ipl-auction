@@ -278,7 +278,7 @@ export default function App() {
 
           {/* Visible Owner Name on Every Page */}
           <div className="font-display text-base sm:text-lg font-extrabold tracking-wider text-[#CFEAE0] whitespace-nowrap shrink-0">
-            HARSHAVARDHAN
+            HV
           </div>
         </div>
       </header>
