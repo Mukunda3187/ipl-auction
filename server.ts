@@ -377,6 +377,29 @@ async function startServer(): Promise<void> {
   await restoreRoomsSnapshot();
   const app = express();
   app.set('trust proxy', 1);
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((s) => s.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
+
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin && (allowedOrigins.length === 0 || allowedOrigins.includes(origin))) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Vary', 'Origin');
+      res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        String(req.headers['access-control-request-headers'] || 'Content-Type, X-Requested-With'),
+      );
+      res.setHeader('Access-Control-Max-Age', '86400');
+    }
+    if (req.method === 'OPTIONS') {
+      res.sendStatus(204);
+      return;
+    }
+    next();
+  });
   app.use(express.json({ limit: '256kb' }));
 
   app.get('/api/health', (_req, res) => {
