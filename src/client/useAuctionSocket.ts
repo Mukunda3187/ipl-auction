@@ -6,6 +6,7 @@ import type {
   ServerMessage,
   Team,
 } from '../shared/types.ts';
+import { backendWsUrl } from './backend.ts';
 
 export type VoiceServerMessage = Extract<ServerMessage, { type: 'voice:peers' | 'voice:signal' }>;
 
@@ -214,8 +215,7 @@ export function useAuctionSocket({ onRoomJoined, onSoundEvent }: UseAuctionSocke
       setStatus(reconnectAttemptRef.current > 0 ? 'reconnecting' : 'connecting');
       setConnectionError(null);
 
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+      const ws = new WebSocket(backendWsUrl());
       wsRef.current = ws;
 
       ws.onopen = () => {
