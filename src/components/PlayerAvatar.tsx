@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Player } from '../shared/types.ts';
+import { backendUrl } from '../client/backend.ts';
 
 interface PlayerAvatarProps {
   player: Player;
@@ -45,7 +46,7 @@ export function PlayerAvatar({ player, size = 'hero' }: PlayerAvatarProps) {
     >
       {hasPhoto ? (
         <img
-          src={player.photoUrl}
+          src={backendUrl(player.photoUrl)}
           alt={`Portrait of ${player.name}, ${player.role} from ${player.nationality}`}
           loading={size === 'hero' ? 'eager' : 'lazy'}
           referrerPolicy="no-referrer"
