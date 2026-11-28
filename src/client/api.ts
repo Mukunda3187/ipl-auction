@@ -1,3 +1,5 @@
+import { backendUrl } from './backend.ts';
+
 export interface ApiErrorPayload {
   ok?: boolean;
   code?: string;
@@ -16,9 +18,9 @@ export async function apiFetch<T = unknown>(
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(url, {
+  const response = await fetch(backendUrl(url) as string, {
     ...init,
-    credentials: 'include',
+    credentials: 'same-origin',
     headers,
   });
 
